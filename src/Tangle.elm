@@ -64,26 +64,17 @@ container address model children =
   span
     [ style [ ("position", "relative") ]
     , on "mousedown" pageX (Signal.message address << StartDrag)
+
+    -- the other events are passed in from the top because
+    -- otherwise they only fire within our bounding box
+
     -- , onDragEnd value (\_ -> Signal.message address StopDrag)
     -- , onDrag pageX (Signal.message address << MoveDrag)
     ]
     [ span
         [ style containerStyle ]
         children
-    -- , div [ style coverStyle ] [ ]
     ]
-
--- coverStyle : Style
--- coverStyle =
-  -- [ ("position", "absolute")
-  -- , ("background", "transparent")
-  -- , ("left", "0px")
-  -- , ("top", "0px")
-  -- , ("bottom", "0px")
-  -- , ("right", "0px")
-  -- -- , ("border", "solid 3px blue")
-  -- -- , ("pointer-events", "auto")
-  -- ]
 
 containerStyle : Style
 containerStyle =
