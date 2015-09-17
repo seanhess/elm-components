@@ -8,26 +8,26 @@ Elm.Native.Drag.make = function(elm)
     return elm.Native.Drag.values;
   }
 
-	var Json = Elm.Native.Json.make(elm);
-	var Signal = Elm.Native.Signal.make(elm);
+  var Json = Elm.Native.Json.make(elm);
+  var Signal = Elm.Native.Signal.make(elm);
 
-	function property(key, value)
-	{
-		return {
-			key: key,
-			value: value
-		};
-	}
+  function property(key, value)
+  {
+    return {
+      key: key,
+      value: value
+    };
+  }
 
   // so, now what?
-	function onMouseDownInside(decoder, createMessage)
-	{
-		function eventHandler(event)
-		{
+  function onMouseDownInside(decoder, createMessage)
+  {
+    function eventHandler(event)
+    {
       var element = this
-			var value = A2(Json.runDecoderValue, decoder, event);
-			if (value.ctor === 'Ok')
-			{
+      var value = A2(Json.runDecoderValue, decoder, event);
+      if (value.ctor === 'Ok')
+      {
         function onMouseUp(event) {
           document.documentElement.removeEventListener("mouseup", onMouseUp, true)
           document.documentElement.removeEventListener("mousemove", onMouseMove, false)
@@ -60,11 +60,11 @@ Elm.Native.Drag.make = function(elm)
         document.documentElement.addEventListener("mouseup", onMouseUp, true)
         document.documentElement.addEventListener("mousemove", onMouseMove, false)
 
-				Signal.sendMessage(createMessage(value._0));
-			}
-		}
-		return property('onmousedown', eventHandler);
-	}
+        Signal.sendMessage(createMessage(value._0));
+      }
+    }
+    return property('onmousedown', eventHandler);
+  }
 
   return Elm.Native.Drag.values = {
     onMouseDownInside: F2(onMouseDownInside)
@@ -73,5 +73,3 @@ Elm.Native.Drag.make = function(elm)
 
 // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/MouseEvent
 var eventInitProperties = ["screenX", "screenY", "clientX", "clientY", "ctrlKey", "shiftKey", "altKey", "metaKey", "button", "buttons", "relatedTarget", "region", "detail", "view", "bubbles", "cancelable"]
-//var uiEventProperties = ["detail", "view"]
-// 
