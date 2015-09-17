@@ -6,11 +6,11 @@ import Html.Attributes exposing (style, draggable)
 import Style exposing (Style)
 import Signal exposing (Address)
 import Events exposing (pageX)
-import Json.Decode exposing (value)
-import Debug
-import VirtualDom
 
--- I don't KNOW the model!
+import Json.Decode as Json exposing (value)
+import Debug
+import VirtualDom exposing (Property)
+import Native.Drag
 
 type alias Model =
   { dragging : Bool
@@ -41,7 +41,7 @@ update action model =
       ( { model | dragging <- False, lastN <- 0, start <- 0}, None )
 
     MoveDrag pos ->
-      if pos == 0 then (model, None) else
+      if pos == 0 || not model.dragging then (model, None) else
       let dx = pos - model.start
           totN = round (dx / model.pixelsPerNum)
           dn = totN - model.lastN
@@ -52,10 +52,13 @@ container : Address Action -> Model -> List Html -> Html
 container address model children =
   span
     [ style [ ("position", "relative") ]
-    , draggable "false"
-    , on "dragstart" pageX (Signal.message address << StartDrag)
-    , on "dragend" value (\_ -> Signal.message address StopDrag)
-    , on "drag" pageX (Signal.message address << MoveDrag)
+    -- , draggable "false"
+    -- , on "dragstart" pageX (Signal.message address << StartDrag)
+    -- , on "dragend" value (\_ -> Signal.message address StopDrag)
+    -- , on "drag" pageX (Signal.message address << MoveDrag)
+    , onMouseDownInside pageX (Signal.message address << StartDrag)
+    , on "mouseup" value (\_ -> Signal.message address StopDrag)
+    , on "mousemove" pageX (Signal.message address << MoveDrag)
     ]
     [ span
         [ style containerStyle ]
@@ -83,3 +86,11 @@ containerStyle =
   , ("border-bottom", "1px dashed #46F")
   -- , ("pointer-events", "auto")
   ]
+
+
+
+--------------------------------------------------
+
+onMouseDownInside : Json.Decoder a -> (a -> Signal.Message) -> Property
+onMouseDownInside decoder toMessage =
+  Native.Drag.onMouseDownInside decoder toMessage

@@ -23,14 +23,17 @@ view address model =
     [ h1 [] [ text "Tangle Example" ]
     , p []
         [ text "When you eat "
+
         , Tangle.container
             (Signal.forwardTo address Tangle)
             model.tangle
             [ text ((toString model.numCookies) ++ " cookies") ]
+
         , text (" you consume " ++ toString (calories model.numCookies) ++ " calories")
         ]
-    -- , p [] [ pre [] [ text (toString model) ] ]
     ]
+
+------------------------------------------------------------------------------------------
 
 type Action
   = Tangle Tangle.Action
