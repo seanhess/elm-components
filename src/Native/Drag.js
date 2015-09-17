@@ -19,7 +19,6 @@ Elm.Native.Drag.make = function(elm)
     };
   }
 
-  // so, now what?
   function onMouseDownInside(decoder, createMessage)
   {
     function eventHandler(event)
@@ -55,7 +54,7 @@ Elm.Native.Drag.make = function(elm)
           element.dispatchEvent(ev)
         }
 
-        // now, attach a document listener. We need to use capture
+        // now, attach a document listener. We need to use capture on mouseup
         // so we can intercept it before it hits the element, to avoid triggering 2x
         document.documentElement.addEventListener("mouseup", onMouseUp, true)
         document.documentElement.addEventListener("mousemove", onMouseMove, false)
